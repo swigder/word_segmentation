@@ -22,3 +22,7 @@ def binary_search(items, item, comparator=(lambda x, y: 0 if x == y else 1 if x 
             hi = mid
 
     return -1
+
+
+def bisect_string(string, location):
+    return string[:location], string[location:]

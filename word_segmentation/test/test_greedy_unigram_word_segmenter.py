@@ -1,12 +1,12 @@
-from word_segmentation.unigram_word_segmenter import UnigramWordSegmenter
+from word_segmentation.greedy_unigram_word_segmenter import GreedyUnigramWordSegmenter
 from word_segmentation.brown_unigram_provider import BrownUnigramProvider
 
 
-class TestMaxMatcher:
+class TestGreedyUnigramWordSegmenter:
 
-    word_segmenter = UnigramWordSegmenter(BrownUnigramProvider())
+    word_segmenter = GreedyUnigramWordSegmenter(BrownUnigramProvider())
 
-    def test_max_match(self):
+    def test_segment_words(self):
         assert self.word_segmenter.segment_words("there") == ["the", "re"]
         assert self.word_segmenter.segment_words("thetabledownthere") == ["the", "table", "do", "w", "n", "the", "re"]
         assert self.word_segmenter.segment_words("THISISTHESECONDHOMEWORKOFTHEFALLSEMESTER") == \

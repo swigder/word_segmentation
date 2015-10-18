@@ -1,4 +1,4 @@
-class UnigramWordSegmenter:
+class GreedyUnigramWordSegmenter:
     """
     Segments a sentence containing no spaces into a list of words, by greedily maximizing the unigram counts for each
     possible word from left-to-right.  Unigram counts are provided by a given unigram_provider.

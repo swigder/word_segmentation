@@ -6,7 +6,7 @@ class TestMaxMatcher:
 
     max_matcher = MaxMatchWordSegmenter(CmuDictionary())
 
-    def test_max_match(self):
+    def test_segment_words(self):
         assert self.max_matcher.segment_words("there") == ["there"]
         assert self.max_matcher.segment_words("thetabledownthere") == ["theta", "bled", "own", "there"]
         assert self.max_matcher.segment_words("THISISTHESECONDHOMEWORKOFTHEFALLSEMESTER") == \
