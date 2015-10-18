@@ -1,4 +1,4 @@
-class MaxMatcher:
+class MaxMatchWordSegmenter:
     """
     Basic max-match implementation for word segmentation using a given dictionary.
     Tends to have very bad results for English.
@@ -10,7 +10,7 @@ class MaxMatcher:
         """
         self.dictionary = dictionary
 
-    def max_match(self, string):
+    def segment_words(self, string):
         """
         Segments a sentence into words using the max-match algorithm.  This will attempt to greedily find the largest
         words in a sentence, starting at the beginning and moving left-to-right with the remaining string.
