@@ -36,6 +36,11 @@ class UnigramWordSegmenter:
         return words
 
     def find_prefixes(self, string):
+        """
+        Finds all the prefixes of a given string whose unigram frequencies are at least one.
+        :param string: string for which to find word prefixes
+        :return: all word prefix of the given string with a unigram count of at least one, [] if there are none
+        """
         words = []
         word_end = len(string)
         while word_end > 1:
