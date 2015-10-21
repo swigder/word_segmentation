@@ -1,10 +1,10 @@
 from word_segmentation.greedy_unigram_word_segmenter import GreedyUnigramWordSegmenter
-from word_segmentation.brown_unigram_provider import BrownUnigramProvider
+from word_segmentation.brown_cmu_unigram_provider import BrownCmuUnigramProvider
 
 
 class TestGreedyUnigramWordSegmenter:
 
-    word_segmenter = GreedyUnigramWordSegmenter(BrownUnigramProvider())
+    word_segmenter = GreedyUnigramWordSegmenter(BrownCmuUnigramProvider())
 
     def test_segment_words(self):
         assert self.word_segmenter.segment_words("there") == ["the", "re"]

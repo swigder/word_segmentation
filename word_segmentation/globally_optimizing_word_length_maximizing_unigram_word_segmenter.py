@@ -1,20 +1,18 @@
 from utilities.utilities import bisect_string
+from math import pow
 
 
-class RealWordMaximizingWordSegmenter:
+class GloballyOptimizingWordLengthMaximizingUnigramWordSegmenter:
     """
-    Segments a sentence containing no spaces into a list of words, by globally maximizing the proportion of words to
-    non-words in the segmentation.  Each segmentation is given a score, which is the sum of a positive point value for
-    each word whose unigram count is higher than some threshold, and higher negative point value for each word whose
-    unigram count is below that threshold.  The constant scores and high negative : positive score ratio was required
-    to ensure that short, extremely frequent words don't overwhelm less common words.
-    This algorithm has the limitation that it will always favor two shorter real words instead of one longer one.  For
-    example, ["home", "work"] will always be favored over ["homework"]
+    Segments a sentence containing no spaces into a list of words, by globally maximizing the frequency of words in the
+    segmentation as well as favoring longer words.  Each segmentation is given a score, which is the product of the
+    frequency of the word and the power of the length of the word.  Using the power of the length of the word ensures
+    that less frequent compound words have a chance against their more frequent counterparts (such as "homework" against
+    "home", "work"), but even is necessary to ensure that very frequent words, such as "the", don't overwhelm the entire
+    scoring.  (Tests using the log of the frequency to avoid this overwhelming effect ran into the same problem by for
+    a different reason -- adding logs favors many small words over longer ones, and recomputing the frequencies after
+    adjusting for word length is expensive and non-trivial.)
     """
-
-    SCORE_WORD = 1
-    PENALTY_NON_WORD = -3
-    WORD_THRESHOLD = 100
 
     def __init__(self, unigram_provider):
         """
@@ -24,7 +22,8 @@ class RealWordMaximizingWordSegmenter:
 
     def segment_words(self, string):
         """
-        Segments a sentence into words using a globally optimal real:fake word ratio maximizing algorithm.
+        Segments a sentence into words using by optimizing unigram counts globally as well as favoring long words over
+        short ones.
         :param string: words without spaces separating them
         :return: list of words that are a word segmentation of the given string
         """
@@ -33,8 +32,9 @@ class RealWordMaximizingWordSegmenter:
 
     def segment_words_dynamically(self, string, cache):
         """
-        Segments a sentence into words using a globally optimal real:fake word ratio maximizing algorithm.  Uses dynamic
-        programming under the hood, adding to the cache of best segmentation for the given string and all substrings.
+        Segments a sentence into words using by optimizing unigram counts globally as well as favoring long words over
+        short ones. Uses dynamic programming under the hood, adding to the cache of best segmentation for the given
+        string and all substrings.
         This method is called recursively.
         :param string: words without spaces separating them
         :param cache: cache of best segmentations for the string (or any other strings in the global string)
@@ -44,7 +44,7 @@ class RealWordMaximizingWordSegmenter:
             return cache[string]
 
         frequency_whole = self.unigram_provider.get_frequency(string)
-        score_whole = self.SCORE_WORD if frequency_whole > self.WORD_THRESHOLD else self.PENALTY_NON_WORD
+        score_whole = frequency_whole * pow(len(string), 11)
         if len(string) <= 1:  # base case
             cache[string] = [string], score_whole
             return cache[string]

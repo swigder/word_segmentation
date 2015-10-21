@@ -1,14 +1,17 @@
-from nltk.corpus import brown
+from nltk.corpus import brown, cmudict
 import nltk
 
+from utilities.utilities import binary_search
 
-class BrownUnigramProvider:
+
+class BrownCmuUnigramProvider:
     """
     Provides unigram counts for words in the Brown corpus.  Keeps corpus in memory for speed.
     """
 
-    words = brown.words()
-    word_distribution = nltk.FreqDist(w.lower() for w in words)
+    words = cmudict.words()
+    brown_words = brown.words()
+    word_distribution = nltk.FreqDist(w.lower() for w in brown_words)
 
     def get_frequency(self, word):
         """
@@ -16,7 +19,7 @@ class BrownUnigramProvider:
         :param word: word to find in the corpus
         :return: number of times the word appears in the corpus, ignoring letter case
         """
-        return self.word_distribution[word.lower()]
+        return self.word_distribution[word.lower()] + (1 if binary_search(self.words, word.lower()) != -1 else 0)
 
     def get_most_frequent_word(self, words):
         """
