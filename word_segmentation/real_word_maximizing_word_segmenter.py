@@ -9,12 +9,15 @@ class RealWordMaximizingWordSegmenter:
     unigram count is below that threshold.  The constant scores and high negative : positive score ratio was required
     to ensure that short, extremely frequent words don't overwhelm less common words.
     This algorithm has the limitation that it will always favor two shorter real words instead of one longer one.  For
-    example, ["home", "work"] will always be favored over ["homework"]
+    example, ["home", "work"] will always be favored over ["homework"].  To compensate for this, the score is divided
+    by the number of words in it.  However, this makes ["home", "work"] equal to ["homework"], which puts the problem
+    on the tie-breaker.
     """
 
     SCORE_WORD = 1
     PENALTY_NON_WORD = -3
-    WORD_THRESHOLD = 100
+    WORD_THRESHOLD = 1
+    LETTER_THRESHOLD = 10000
 
     def __init__(self, unigram_provider):
         """
@@ -44,7 +47,8 @@ class RealWordMaximizingWordSegmenter:
             return cache[string]
 
         frequency_whole = self.unigram_provider.get_frequency(string)
-        score_whole = self.SCORE_WORD if frequency_whole > self.WORD_THRESHOLD else self.PENALTY_NON_WORD
+        threshold = self.LETTER_THRESHOLD if len(string) == 1 else self.WORD_THRESHOLD
+        score_whole = self.SCORE_WORD if frequency_whole > threshold else self.PENALTY_NON_WORD
         if len(string) <= 1:  # base case
             cache[string] = [string], score_whole
             return cache[string]
@@ -56,7 +60,7 @@ class RealWordMaximizingWordSegmenter:
             a, b = bisect_string(string, i)
             segmentation_a, score_a = self.segment_words_dynamically(a, cache)
             segmentation_b, score_b = self.segment_words_dynamically(b, cache)
-            score = score_a + score_b
+            score = (score_a + score_b) / (len(segmentation_a) + len(segmentation_b))
             if score > best_score:
                 best_score = score
                 best_segmentation = segmentation_a + segmentation_b
