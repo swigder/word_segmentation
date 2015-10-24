@@ -57,7 +57,7 @@ class BigramWordSegmenter:
             new_bigram = tuple([segmentation_a[-1], segmentation_b[0]])
             frequency_first_word = max(self.unigram_provider.get_frequency(segmentation_a[-1]), 1)
             probability_new_bigram = max(1, self.bigram_provider.get_frequency(new_bigram)) / frequency_first_word
-            score = score_a * score_b * probability_new_bigram
+            score = score_a * score_b * probability_new_bigram * len(segmentation_a + segmentation_b)
             if score > best_score:
                 best_score = score
                 best_segmentation = segmentation_a + segmentation_b
