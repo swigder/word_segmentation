@@ -19,7 +19,10 @@ class BrownCmuUnigramProvider:
         :param word: word to find in the corpus
         :return: number of times the word appears in the corpus, ignoring letter case
         """
-        return self.word_distribution[word.lower()] + (1 if binary_search(self.words, word.lower()) != -1 else 0)
+        def case_insensitive_comparator(x, y):
+            return 0 if x.lower() == y.lower() else 1 if x.lower() > y.lower() else -1
+        in_cmu = binary_search(self.words, word.lower(), case_insensitive_comparator) != -1
+        return self.word_distribution[word.lower()] + in_cmu
 
     def get_most_frequent_word(self, words):
         """

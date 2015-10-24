@@ -35,14 +35,14 @@ class TestAllWordSegmenters:
         for word_segmenter in word_segmenters:
             errors[word_segmenter] = (0, 0)
 
-        punctuation = ['"', '.', ',', '[', ']', '_']
-        for sentence_with_punctuation in self.sentences[:100]:
+        punctuation = ['"', '.', ',', '[', ']', '_', '-', '?', '?"', '."', ',"', '!', '!"']
+        for sentence_with_punctuation in self.sentences[10:20]:
             sentence = [segment for segment in sentence_with_punctuation if segment not in punctuation]
             sentence_without_spaces = "".join(sentence)
             for word_segmenter in word_segmenters:
                 result = word_segmenter.segment_words(sentence_without_spaces)
                 if result != sentence:
-                    print(word_segmenter, sentence, result)
+                    print(word_segmenter, " ".join(sentence), " ".join(result))
                     sentence_errors, word_errors = errors[word_segmenter]
                     errors[word_segmenter] = (sentence_errors + 1, word_errors + len(set(sentence) ^ set(result)))
 
