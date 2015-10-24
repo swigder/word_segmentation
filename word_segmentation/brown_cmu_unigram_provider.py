@@ -31,3 +31,6 @@ class BrownCmuUnigramProvider:
         :return: word in the list with the high
         """
         return max(words, key=lambda word: self.get_frequency(word))
+
+    def get_total_words(self):
+        return len(self.words) + len(self.brown_words)

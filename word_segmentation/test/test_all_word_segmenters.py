@@ -1,7 +1,9 @@
 from nltk.corpus import gutenberg
 
 from word_segmentation.brown_cmu_unigram_provider import BrownCmuUnigramProvider
+from word_segmentation.brown_bigram_provider import BrownBigramProvider
 from word_segmentation.cmu_dictionary import CmuDictionary
+from word_segmentation.bigram_word_segmenter import BigramWordSegmenter
 from word_segmentation.globally_optimizing_unigram_word_segmenter import GloballyOptimizingUnigramWordSegmenter
 from word_segmentation.globally_optimizing_word_length_maximizing_unigram_word_segmenter import \
     GloballyOptimizingWordLengthMaximizingUnigramWordSegmenter
@@ -12,7 +14,9 @@ from word_segmentation.real_word_maximizing_word_segmenter import RealWordMaximi
 
 class TestAllWordSegmenters:
     unigram_provider = BrownCmuUnigramProvider()
+    bigram_provider = BrownBigramProvider()
     cmu_dictionary = CmuDictionary()
+    bigram_word_segmenter = BigramWordSegmenter(unigram_provider, bigram_provider)
     globally_optimizing_unigram_word_segmenter = GloballyOptimizingUnigramWordSegmenter(unigram_provider)
     globally_optimizing_word_length_maximizing_unigram_word_segmenter = \
         GloballyOptimizingWordLengthMaximizingUnigramWordSegmenter(unigram_provider)
@@ -24,6 +28,7 @@ class TestAllWordSegmenters:
 
     def test_all_word_segmenters(self):
         word_segmenters = [
+                self.bigram_word_segmenter,
                 self.globally_optimizing_unigram_word_segmenter,
                 self.globally_optimizing_word_length_maximizing_unigram_word_segmenter,
                 self.greedy_unigram_word_segmenter,
