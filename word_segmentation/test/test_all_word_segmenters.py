@@ -40,14 +40,31 @@ class TestAllWordSegmenters:
         for word_segmenter in word_segmenters:
             errors[word_segmenter] = (0, 0)
 
-        punctuation = ['"', '.', ',', '[', ']', '_', '-', '?', '?"', '."', ',"', '!', '!"']
-        for sentence_with_punctuation in self.sentences[10:20]:
-            sentence = [segment for segment in sentence_with_punctuation if segment not in punctuation]
+        punctuation = ['"', '.', ',', '[', ']', '_', '-', '?', '?"', '."', ',"', '!', '!"', ';', ':', '(', ')']
+        apostrophe_words = ['i', 'it', 'that', 'she', 'he', 'there', 'can']
+        for sentence_with_punctuation in self.sentences[0:100]:
+            # remove punctuation
+            sentence_with_splits = [segment for segment in sentence_with_punctuation if segment not in punctuation]
+
+            # combine contractions -- our segmenters recognize them as one word, while nltk as two
+            sentence = []
+            i = 0
+            while i < len(sentence_with_splits)-2:
+                if sentence_with_splits[i].lower() in apostrophe_words and sentence_with_splits[i+1] == "'":
+                    sentence.append("".join(sentence_with_splits[i:i+3]))
+                    i += 3
+                else:
+                    sentence.append(sentence_with_splits[i])
+                    i += 1
+            sentence.append(sentence_with_splits[-2])
+            sentence.append(sentence_with_splits[-1])
             sentence_without_spaces = "".join(sentence)
+
+            # segment using all word segmenters and log differences
             for word_segmenter in word_segmenters:
                 result = word_segmenter.segment_words(sentence_without_spaces)
                 if result != sentence:
-                    print(word_segmenter, " ".join(sentence), " ".join(result))
+                    print(word_segmenter, '\nActual:    ', " ".join(sentence), '\nSegmenter: ', " ".join(result))
                     sentence_errors, word_errors = errors[word_segmenter]
                     errors[word_segmenter] = (sentence_errors + 1, word_errors + len(set(sentence) ^ set(result)))
 
