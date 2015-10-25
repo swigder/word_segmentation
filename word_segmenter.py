@@ -34,7 +34,7 @@ if __name__ == "__main__":
     segmenter_arg = parser.add_mutually_exclusive_group()
     segmenter_arg.add_argument('-s', '--segmenter', type=str, choices=segmenters.keys(), default='bigram',
                                help='specify a segmenter to use')
-    segmenter_arg.add_argument('-a', '--all', action='store_true', help='show results for all parsers')
+    segmenter_arg.add_argument('-a', '--all', action='store_true', help='show results for all segmenters')
 
     args = parser.parse_args()
 
