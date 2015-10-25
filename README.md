@@ -23,4 +23,15 @@ To run with the default word segmenter (bigram word segmenter), run `python3 wor
 For more details, run `python word_segmenter.py --help`.
 
 ### Using as a library
-All segmentation classes implement the method `segment_words(str)`.  To use a segmenter, create it using the dictionary, unigram provider, and / or bigram provider as listed in the pydoc, and then call `segment_words`.  Default providers are available as part of the package.  For more detail, see sample code in the test and in `word_segmenter.py`. 
+All segmentation classes implement the method `segment_words(str)`.  To use a segmenter, create it using the dictionary, unigram provider, and / or bigram provider as listed in the docstrings, and then call `segment_words`.  Default providers are available as part of the package.  For more detail, see sample code in the test and in `word_segmenter.py`. 
+
+
+## Included files
+* `utilities/utilities.py`: methods for binary search and bisecting strings
+* `word_segmentation/*_word_segmenter.py`: implementations of the word segmentation algorithms described above
+* `word_segmentation/cmu_dictionary.py`: dictionary implementation that implements is_word, used by max_match
+* `word_segmentation/[brown_cmu_unigram|brown_bigram]_provider.py`: unigram and bigram providers that implement get_frequency, used by all algorithms other than max_match
+* `word_segmentation/test/test_*_word_segmenter.py`: individual tests for the segmenters listed above
+* `word_segmentation/test/test_all_word_segmenters.py`: comparative tests for all segmenters, using test sentences from NLTK's Gutenberg corpus.
+* `word_segmenter.py`: command line interface for this package
+Detailed descriptions of each (non-test) class is provided in the documentation in each file.
