@@ -35,6 +35,7 @@ if __name__ == "__main__":
     segmenter_arg.add_argument('-s', '--segmenter', type=str, choices=segmenters.keys(), default='bigram',
                                help='specify a segmenter to use')
     segmenter_arg.add_argument('-a', '--all', action='store_true', help='show results for all segmenters')
+    parser.add_argument('--mode', default='command', choices=['command', 'interactive'])
 
     args = parser.parse_args()
 
@@ -44,3 +45,8 @@ if __name__ == "__main__":
     else:
         segmenter = segmenters[args.segmenter]
         print(" ".join(segmenter.segment_words(args.sentence)))
+
+        if args.mode == 'interactive':
+            while True:
+                sentence = input(">> ")
+                print(" ".join(segmenter.segment_words(sentence)))

@@ -18,7 +18,7 @@ The tests for each of these algorithms show their results for three sentences, "
 This package requires python3 to run, and uses numpy, nltk, and pytest. It assumes that the NLTK CMUDict, Brown, and (for testing) Gutenberg corpora have been installed. For more information, see http://www.nltk.org/data.html.
 
 ### Running from the command line
-To run with the default word segmenter (bigram word segmenter), run `python3 word_segmenter.py <sentence>`.  A specific segmenter can also be specified using the argument `-s <segmenter_name>`.  To see results for all six segmenters, pass the argument `--all`.
+To run with the default word segmenter (bigram word segmenter), run `python3 word_segmenter.py <sentence>`.  A specific segmenter can also be specified using the argument `-s <segmenter_name>`.  To see results for all six segmenters, pass the argument `--all`.  To run in interactive mode, pass the argument `--mode interactive`.
 
 For more details, run `python word_segmenter.py --help`.
 
